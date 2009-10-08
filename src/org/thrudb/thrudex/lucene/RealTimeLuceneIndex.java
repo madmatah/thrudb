@@ -24,6 +24,7 @@ import org.apache.lucene.search.ParallelMultiSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searchable;
 import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
@@ -207,8 +208,36 @@ public class RealTimeLuceneIndex implements LuceneIndex, Runnable {
 			//Set Sort
 			Sort    sortBy = new Sort();
 			
-			if(query.isSetSortby() && !query.sortby.trim().equals(""))
-				sortBy.setSort(query.getSortby() + "_sort", query.desc);
+			if(query.isSetSortby() && !query.sortby.trim().equals("")){
+			        int sortType;
+				switch(query.getSortType()) {
+				case org.thrudb.thrudex.SortType.AUTO:
+				    sortType = org.apache.lucene.search.SortField.AUTO;
+				    break;
+				case org.thrudb.thrudex.SortType.DOUBLE:
+				    sortType = org.apache.lucene.search.SortField.DOUBLE;
+				    break;
+				case org.thrudb.thrudex.SortType.FLOAT:
+				    sortType = org.apache.lucene.search.SortField.FLOAT;
+				    break;
+				case org.thrudb.thrudex.SortType.INT:
+				    sortType = org.apache.lucene.search.SortField.INT;
+				    break;
+				case org.thrudb.thrudex.SortType.LONG:
+				    sortType = org.apache.lucene.search.SortField.LONG;
+				    break;
+				case org.thrudb.thrudex.SortType.SHORT:
+				    sortType = org.apache.lucene.search.SortField.SHORT;
+				    break;
+				case org.thrudb.thrudex.SortType.STRING:
+				    sortType = org.apache.lucene.search.SortField.STRING;
+				    break;
+				default:
+				    throw new ThrudexExceptionImpl("Unknown QueryAnalyzer: " + query.getSortType());
+				}
+			        SortField sortField = new SortField(query.getSortby() + "_sort", sortType, query.desc);
+			        sortBy.setSort(sortField);
+			}
 		
 			
 			//Search		

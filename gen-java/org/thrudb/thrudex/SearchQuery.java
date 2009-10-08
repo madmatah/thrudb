@@ -29,6 +29,7 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
   private static final TField PAYLOAD_FIELD_DESC = new TField("payload", TType.BOOL, (short)8);
   private static final TField DEFAULT_ANALYZER_FIELD_DESC = new TField("defaultAnalyzer", TType.I32, (short)9);
   private static final TField FIELD_ANALYZERS_FIELD_DESC = new TField("fieldAnalyzers", TType.MAP, (short)10);
+  private static final TField SORT_TYPE_FIELD_DESC = new TField("sortType", TType.I32, (short)11);
 
   public String index;
   public static final int INDEX = 1;
@@ -50,6 +51,8 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
   public static final int DEFAULTANALYZER = 9;
   public Map<String,Integer> fieldAnalyzers;
   public static final int FIELDANALYZERS = 10;
+  public int sortType;
+  public static final int SORTTYPE = 11;
 
   private final Isset __isset = new Isset();
   private static final class Isset implements java.io.Serializable {
@@ -59,6 +62,7 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
     public boolean randomize = false;
     public boolean payload = false;
     public boolean defaultAnalyzer = false;
+    public boolean sortType = false;
   }
 
   public static final Map<Integer, FieldMetaData> metaDataMap = Collections.unmodifiableMap(new HashMap<Integer, FieldMetaData>() {{
@@ -84,6 +88,8 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
         new MapMetaData(TType.MAP, 
             new FieldValueMetaData(TType.STRING), 
             new FieldValueMetaData(TType.I32))));
+    put(SORTTYPE, new FieldMetaData("sortType", TFieldRequirementType.DEFAULT, 
+        new FieldValueMetaData(TType.I32)));
   }});
 
   static {
@@ -105,6 +111,8 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
 
     this.fieldAnalyzers = new HashMap<String,Integer>();
 
+    this.sortType = 1;
+
   }
 
   public SearchQuery(
@@ -117,7 +125,8 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
     boolean randomize,
     boolean payload,
     int defaultAnalyzer,
-    Map<String,Integer> fieldAnalyzers)
+    Map<String,Integer> fieldAnalyzers,
+    int sortType)
   {
     this();
     this.index = index;
@@ -136,6 +145,8 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
     this.defaultAnalyzer = defaultAnalyzer;
     this.__isset.defaultAnalyzer = true;
     this.fieldAnalyzers = fieldAnalyzers;
+    this.sortType = sortType;
+    this.__isset.sortType = true;
   }
 
   /**
@@ -178,6 +189,8 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
       }
       this.fieldAnalyzers = __this__fieldAnalyzers;
     }
+    __isset.sortType = other.__isset.sortType;
+    this.sortType = other.sortType;
   }
 
   @Override
@@ -420,6 +433,28 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
     }
   }
 
+  public int getSortType() {
+    return this.sortType;
+  }
+
+  public void setSortType(int sortType) {
+    this.sortType = sortType;
+    this.__isset.sortType = true;
+  }
+
+  public void unsetSortType() {
+    this.__isset.sortType = false;
+  }
+
+  // Returns true if field sortType is set (has been asigned a value) and false otherwise
+  public boolean isSetSortType() {
+    return this.__isset.sortType;
+  }
+
+  public void setSortTypeIsSet(boolean value) {
+    this.__isset.sortType = value;
+  }
+
   public void setFieldValue(int fieldID, Object value) {
     switch (fieldID) {
     case INDEX:
@@ -502,6 +537,14 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
       }
       break;
 
+    case SORTTYPE:
+      if (value == null) {
+        unsetSortType();
+      } else {
+        setSortType((Integer)value);
+      }
+      break;
+
     default:
       throw new IllegalArgumentException("Field " + fieldID + " doesn't exist!");
     }
@@ -539,6 +582,9 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
     case FIELDANALYZERS:
       return getFieldAnalyzers();
 
+    case SORTTYPE:
+      return getSortType();
+
     default:
       throw new IllegalArgumentException("Field " + fieldID + " doesn't exist!");
     }
@@ -567,6 +613,8 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
       return isSetDefaultAnalyzer();
     case FIELDANALYZERS:
       return isSetFieldAnalyzers();
+    case SORTTYPE:
+      return isSetSortType();
     default:
       throw new IllegalArgumentException("Field " + fieldID + " doesn't exist!");
     }
@@ -672,6 +720,15 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
       if (!(this_present_fieldAnalyzers && that_present_fieldAnalyzers))
         return false;
       if (!this.fieldAnalyzers.equals(that.fieldAnalyzers))
+        return false;
+    }
+
+    boolean this_present_sortType = true;
+    boolean that_present_sortType = true;
+    if (this_present_sortType || that_present_sortType) {
+      if (!(this_present_sortType && that_present_sortType))
+        return false;
+      if (this.sortType != that.sortType)
         return false;
     }
 
@@ -782,6 +839,14 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
             TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case SORTTYPE:
+          if (field.type == TType.I32) {
+            this.sortType = iprot.readI32();
+            this.__isset.sortType = true;
+          } else { 
+            TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           TProtocolUtil.skip(iprot, field.type);
           break;
@@ -844,6 +909,9 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
       }
       oprot.writeFieldEnd();
     }
+    oprot.writeFieldBegin(SORT_TYPE_FIELD_DESC);
+    oprot.writeI32(this.sortType);
+    oprot.writeFieldEnd();
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -916,6 +984,18 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
       sb.append(this.fieldAnalyzers);
     }
     first = false;
+    if (!first) sb.append(", ");
+    sb.append("sortType:");
+    String sortType_name = SortType.VALUES_TO_NAMES.get(this.sortType);
+    if (sortType_name != null) {
+      sb.append(sortType_name);
+      sb.append(" (");
+    }
+    sb.append(this.sortType);
+    if (sortType_name != null) {
+      sb.append(")");
+    }
+    first = false;
     sb.append(")");
     return sb.toString();
   }
@@ -925,6 +1005,9 @@ public class SearchQuery implements TBase, java.io.Serializable, Cloneable {
     // check that fields of type enum have valid values
     if (isSetDefaultAnalyzer() && !Analyzer.VALID_VALUES.contains(defaultAnalyzer)){
       throw new TProtocolException("The field 'defaultAnalyzer' has been assigned the invalid value " + defaultAnalyzer);
+    }
+    if (isSetSortType() && !SortType.VALID_VALUES.contains(sortType)){
+      throw new TProtocolException("The field 'sortType' has been assigned the invalid value " + sortType);
     }
   }
 

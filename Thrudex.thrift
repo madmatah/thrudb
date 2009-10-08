@@ -20,6 +20,18 @@ enum Analyzer
         WHITESPACE = 5 # org.apache.lucene.analysis.WhitespaceAnalyzer
 }
 
+
+enum SortType # see types in org.apache.lucene.search.SortField
+{
+	AUTO = 1,
+	DOUBLE = 2,
+	FLOAT = 3,
+	INT = 4,
+	LONG = 5,
+	SHORT = 6,
+	STRING = 7
+}
+
 struct Field
 {
         1: string    key,
@@ -61,7 +73,8 @@ struct SearchQuery
         7: bool                   randomize = 0,
         8: bool                   payload   = 0,
         9: Analyzer               defaultAnalyzer = STANDARD,
-        10: map<string, Analyzer> fieldAnalyzers = {}
+        10: map<string, Analyzer> fieldAnalyzers = {},
+	11: SortType              sortType = AUTO
 }
 
 struct SearchResponse
